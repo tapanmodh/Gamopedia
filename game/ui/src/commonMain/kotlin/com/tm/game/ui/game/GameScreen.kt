@@ -1,6 +1,7 @@
 package com.tm.game.ui.game
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -36,7 +37,8 @@ import org.koin.compose.viewmodel.koinViewModel
 fun GameScreen(
     modifier: Modifier = Modifier,
     onFavoriteClick: () -> Unit,
-    onSearchClick: () -> Unit
+    onSearchClick: () -> Unit,
+    onClick: (Int) -> Unit
 ) {
 
     val viewModel = koinViewModel<GameViewModel>()
@@ -45,7 +47,8 @@ fun GameScreen(
         modifier = modifier.fillMaxSize(),
         uiState = uiState.value,
         onFavoriteClick = onFavoriteClick,
-        onSearchClick = onSearchClick
+        onSearchClick = onSearchClick,
+        onClick = onClick
     )
 }
 
@@ -55,7 +58,8 @@ fun GameScreenContent(
     modifier: Modifier = Modifier,
     uiState: GameScreen.UiState,
     onFavoriteClick: () -> Unit,
-    onSearchClick: () -> Unit
+    onSearchClick: () -> Unit,
+    onClick: (Int) -> Unit
 ) {
 
     Scaffold(
@@ -98,7 +102,8 @@ fun GameScreenContent(
             LazyColumn(modifier = modifier.padding(it).fillMaxSize()) {
                 items(data) {
                     Card(
-                        modifier = Modifier.padding(12.dp).fillMaxWidth().height(350.dp),
+                        modifier = Modifier.padding(12.dp).fillMaxWidth().height(350.dp)
+                            .clickable { onClick(it.id) },
                         shape = RoundedCornerShape(12.dp)
                     ) {
                         Box(Modifier.fillMaxSize()) {
@@ -114,8 +119,8 @@ fun GameScreenContent(
                                         color = Color.White,
                                         shape = RoundedCornerShape(12.dp)
                                     ).fillMaxWidth().align(
-                                    Alignment.BottomCenter
-                                )
+                                        Alignment.BottomCenter
+                                    )
                             ) {
                                 Text(
                                     it.name,

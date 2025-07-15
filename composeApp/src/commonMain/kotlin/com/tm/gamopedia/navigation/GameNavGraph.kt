@@ -7,6 +7,7 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.composable
 import androidx.navigation.navigation
 import com.tm.game.ui.game.GameScreen
+import com.tm.game.ui.gameDetails.GameDetailsScreen
 
 object GameNavGraph : BaseNavGraph {
 
@@ -14,6 +15,9 @@ object GameNavGraph : BaseNavGraph {
 
         data object Root : Dest("/game-root")
         data object Game : Dest("/game")
+        data object Details : Dest("/game_details/{id}") {
+            fun getRoute(id: Int) = "/game_details/$id"
+        }
     }
 
     override fun build(
@@ -28,8 +32,16 @@ object GameNavGraph : BaseNavGraph {
                     onFavoriteClick = {},
                     onSearchClick = {
                         navHostController.navigate(SearchNavGraph.Dest.Search.route)
+                    },
+                    onClick = {
+                        navHostController.navigate(Dest.Details.getRoute(it))
                     }
                 )
+            }
+
+            composable(Dest.Details.route) {
+                val id = it.arguments?.getString("id")
+                GameDetailsScreen(modifier = Modifier.fillMaxSize(),id.toString())
             }
         }
     }
