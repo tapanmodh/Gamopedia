@@ -33,7 +33,11 @@ import coil3.compose.AsyncImage
 import org.koin.compose.viewmodel.koinViewModel
 
 @Composable
-fun GameScreen(modifier: Modifier = Modifier, onFavoriteClick: () -> Unit, onSearchClick: () -> Unit) {
+fun GameScreen(
+    modifier: Modifier = Modifier,
+    onFavoriteClick: () -> Unit,
+    onSearchClick: () -> Unit
+) {
 
     val viewModel = koinViewModel<GameViewModel>()
     val uiState = viewModel.uiState.collectAsStateWithLifecycle()
@@ -54,19 +58,20 @@ fun GameScreenContent(
     onSearchClick: () -> Unit
 ) {
 
-    Scaffold(modifier = modifier.fillMaxSize(),
+    Scaffold(
+        modifier = modifier.fillMaxSize(),
         topBar = {
             TopAppBar(
                 title = { Text("Gamopedia") },
                 actions = {
-                    IconButton(onClick = { onSearchClick }) {
+                    IconButton(onClick = onSearchClick) {
                         Icon(
                             imageVector = Icons.Default.Search,
                             contentDescription = null
                         )
                     }
 
-                    IconButton(onClick = { onFavoriteClick }) {
+                    IconButton(onClick = onFavoriteClick) {
                         Icon(
                             imageVector = Icons.Default.Favorite,
                             contentDescription = null
@@ -74,16 +79,16 @@ fun GameScreenContent(
                     }
                 },
 
-            )
+                )
         }) {
 
-        if(uiState.isLoading) {
+        if (uiState.isLoading) {
             Box(Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
                 CircularProgressIndicator()
             }
         }
 
-        if(uiState.error.isNotBlank()) {
+        if (uiState.error.isNotBlank()) {
             Box(Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
                 Text(uiState.error)
             }
@@ -103,8 +108,15 @@ fun GameScreenContent(
                                 modifier = Modifier.fillMaxWidth().height(350.dp),
                                 contentScale = ContentScale.Crop
                             )
-                            Box(modifier = Modifier.padding(horizontal = 12.dp, vertical = 12.dp).background(color = Color.White, shape = RoundedCornerShape(12.dp)).fillMaxWidth().align(
-                                Alignment.BottomCenter)) {
+                            Box(
+                                modifier = Modifier.padding(horizontal = 12.dp, vertical = 12.dp)
+                                    .background(
+                                        color = Color.White,
+                                        shape = RoundedCornerShape(12.dp)
+                                    ).fillMaxWidth().align(
+                                    Alignment.BottomCenter
+                                )
+                            ) {
                                 Text(
                                     it.name,
                                     style = MaterialTheme.typography.bodyLarge,

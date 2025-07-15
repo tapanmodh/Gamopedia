@@ -5,17 +5,16 @@ import io.ktor.client.HttpClient
 import io.ktor.client.call.body
 import io.ktor.client.request.get
 import io.ktor.client.request.parameter
-import io.ktor.http.parameters
 
-class ApiService (val httpClient: HttpClient) {
+class ApiService(val httpClient: HttpClient) {
 
     suspend fun getGames(): Result<GameResponse> {
         return try {
-         val response = httpClient.get("api/games") {
-             url {
-                 parameter("key", "35a5cce3dea54c57abb137bac3b2c65b")
-             }
-         }.body<GameResponse>()
+            val response = httpClient.get("api/games") {
+                url {
+                    parameter("key", "a8e6e41489bd42beb2b136335262bc68")
+                }
+            }.body<GameResponse>()
             Result.success(response)
         } catch (e: Exception) {
             Result.failure(e)
@@ -26,7 +25,7 @@ class ApiService (val httpClient: HttpClient) {
         return try {
             val response = httpClient.get("api/games") {
                 url {
-                    parameter("key", "35a5cce3dea54c57abb137bac3b2c65b")
+                    parameter("key", "a8e6e41489bd42beb2b136335262bc68")
                     parameter("search", q)
                 }
             }.body<GameResponse>()

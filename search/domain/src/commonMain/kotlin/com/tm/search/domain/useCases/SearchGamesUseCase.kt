@@ -8,7 +8,7 @@ import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.flowOn
 
 class SearchGamesUseCase(private val searchRepository: SearchRepository) {
-    suspend operator fun invoke(q: String) = flow {
+    operator fun invoke(q: String) = flow {
         emit(searchRepository.search(q))
     }.catch { error ->
         emit(Result.failure(error))

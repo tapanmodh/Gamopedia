@@ -1,7 +1,6 @@
 package com.tm.game.domain.useCases
 
-import androidx.compose.ui.geometry.Rect
-import com.tm.game.domain.model.Game
+import com.tm.common.domain.model.Game
 import com.tm.game.domain.repository.GameRepository
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.IO

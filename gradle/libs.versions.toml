@@ -69,4 +69,4 @@ kotlinMultiplatform = { id = "org.jetbrains.kotlin.multiplatform", version.ref =
 
 kotlinx-serialization = { id = "org.jetbrains.kotlin.plugin.serialization", version = "1.9.0" }
 kotlinAndroid = { id = "org.jetbrains.kotlin.android", version.ref = "kotlin" }
-sql-delight={id = "app.cash.sqldelight", version.ref = "sqldelight"}
+sql-delight = { id = "app.cash.sqldelight", version.ref = "sqldelight" }
