@@ -3,15 +3,22 @@ package com.tm.game.ui.gameDetails
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.tm.game.domain.model.GameDetails
+import com.tm.game.domain.useCases.DeleteUseCase
 import com.tm.game.domain.useCases.GetGameDetailsUseCase
+import com.tm.game.domain.useCases.SaveGameUseCase
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.onStart
 import kotlinx.coroutines.flow.update
+import kotlinx.coroutines.launch
 
-class GameDetailsViewModel(private val getGameDetailsUseCase: GetGameDetailsUseCase) : ViewModel() {
+class GameDetailsViewModel(
+    private val getGameDetailsUseCase: GetGameDetailsUseCase,
+    private val saveGameUseCase: SaveGameUseCase,
+    private val deleteUseCase: DeleteUseCase
+) : ViewModel() {
 
     private val _uiState = MutableStateFlow(GameDetailsScreen.UiState())
     val uiState = _uiState.asStateFlow()
@@ -27,6 +34,14 @@ class GameDetailsViewModel(private val getGameDetailsUseCase: GetGameDetailsUseC
                     _uiState.update { GameDetailsScreen.UiState(error = error.message.toString()) }
                 }
             }.launchIn(viewModelScope)
+    }
+
+    fun save(id: Int, image: String, name: String) = viewModelScope.launch {
+        saveGameUseCase.invoke(id, image, name)
+    }
+
+    fun delete(id: Int) = viewModelScope.launch {
+        deleteUseCase.invoke(id)
     }
 }
 

@@ -3,16 +3,23 @@ package com.tm.seach.ui
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.grid.items
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
@@ -32,7 +39,7 @@ import coil3.compose.AsyncImage
 import org.koin.compose.viewmodel.koinViewModel
 
 @Composable
-fun SearchScreen(modifier: Modifier = Modifier, onClick: (Int) -> Unit) {
+fun SearchScreen(modifier: Modifier = Modifier, onClick: (Int) -> Unit, onBackClick: () -> Unit) {
 
     val viewModel = koinViewModel<SearchViewModel>()
     val uiState = viewModel.uiState.collectAsStateWithLifecycle()
@@ -44,7 +51,8 @@ fun SearchScreen(modifier: Modifier = Modifier, onClick: (Int) -> Unit) {
             query.value = it
             viewModel.updateQuery(it)
         },
-        onClick = onClick
+        onClick = onClick,
+        onBackClick = onBackClick
     )
 }
 
@@ -55,7 +63,8 @@ fun SearchScreenContent(
     uiState: SearchScreen.UiState,
     query: String,
     onQueryChange: (String) -> Unit,
-    onClick: (Int) -> Unit
+    onClick: (Int) -> Unit,
+    onBackClick: () -> Unit
 ) {
 
     Scaffold(
@@ -63,17 +72,26 @@ fun SearchScreenContent(
         topBar = {
             TopAppBar(
                 title = {
-                    TextField(
-                        value = query, onValueChange = onQueryChange,
-                        singleLine = true,
-                        modifier = Modifier.fillMaxWidth(),
-                        colors = TextFieldDefaults.colors(
-                            unfocusedIndicatorColor = Color.Transparent,
-                            focusedIndicatorColor = Color.Transparent
-                        ), placeholder = {
-                            Text("Search here...")
+                    Row(modifier = Modifier.padding(4.dp).fillMaxWidth()) {
+                        IconButton(onClick = { onBackClick() }) {
+                            Icon(
+                                imageVector = Icons.AutoMirrored.Filled.ArrowBack,
+                                contentDescription = null
+                            )
                         }
-                    )
+                        Spacer(Modifier.width(8.dp))
+                        TextField(
+                            value = query, onValueChange = onQueryChange,
+                            singleLine = true,
+                            modifier = Modifier.fillMaxWidth(),
+                            colors = TextFieldDefaults.colors(
+                                unfocusedIndicatorColor = Color.Transparent,
+                                focusedIndicatorColor = Color.Transparent
+                            ), placeholder = {
+                                Text("Search here...")
+                            }
+                        )
+                    }
                 })
         }) {
 

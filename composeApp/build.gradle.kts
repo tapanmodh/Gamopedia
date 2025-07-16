@@ -1,6 +1,4 @@
 import org.jetbrains.compose.desktop.application.dsl.TargetFormat
-import org.jetbrains.kotlin.gradle.ExperimentalKotlinGradlePluginApi
-import org.jetbrains.kotlin.gradle.dsl.JvmTarget
 
 plugins {
     alias(libs.plugins.kotlinMultiplatform)
@@ -8,14 +6,12 @@ plugins {
     alias(libs.plugins.composeMultiplatform)
     alias(libs.plugins.composeCompiler)
     alias(libs.plugins.composeHotReload)
+    alias(libs.plugins.sql.delight)
 }
 
 kotlin {
     androidTarget {
-        @OptIn(ExperimentalKotlinGradlePluginApi::class)
-        compilerOptions {
-            jvmTarget.set(JvmTarget.JVM_11)
-        }
+
     }
 
     listOf(
@@ -25,7 +21,8 @@ kotlin {
     ).forEach { iosTarget ->
         iosTarget.binaries.framework {
             baseName = "ComposeApp"
-            isStatic = true
+            //isStatic = true
+            linkerOpts("-lsqlite3")
         }
     }
 
@@ -37,6 +34,7 @@ kotlin {
         androidMain.dependencies {
             implementation(compose.preview)
             implementation(libs.androidx.activity.compose)
+            implementation(libs.sql.delight.android)
         }
         commonMain.dependencies {
 
@@ -54,6 +52,8 @@ kotlin {
             implementation(projects.game.data)
             implementation(projects.game.domain)
             implementation(projects.game.ui)
+
+            implementation(projects.coreDatabase)
 
             implementation(compose.runtime)
             implementation(compose.foundation)

@@ -20,9 +20,15 @@ import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.automirrored.filled.ArrowBack
+import androidx.compose.material.icons.filled.Delete
+import androidx.compose.material.icons.filled.Favorite
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.CircularProgressIndicator
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -39,7 +45,7 @@ import coil3.compose.AsyncImage
 import org.koin.compose.viewmodel.koinViewModel
 
 @Composable
-fun GameDetailsScreen(modifier: Modifier = Modifier, id: String) {
+fun GameDetailsScreen(modifier: Modifier = Modifier, id: String, onBackClick: () -> Unit) {
 
     val viewModel = koinViewModel<GameDetailsViewModel>()
     val uiState = viewModel.uiState.collectAsStateWithLifecycle()
@@ -47,14 +53,21 @@ fun GameDetailsScreen(modifier: Modifier = Modifier, id: String) {
     LaunchedEffect(id) {
         viewModel.getGameDetails(id.toInt())
     }
-    GameDetailsScreenContent(modifier.fillMaxSize(), uiState.value)
-
+    GameDetailsScreenContent(
+        modifier = modifier.fillMaxSize(), uiState = uiState.value,
+        onSave = { id, name, image -> viewModel.save(id, image, name) },
+        onDelete = { viewModel.delete(it) },
+        onBackClick = onBackClick
+    )
 }
 
 @Composable
 fun GameDetailsScreenContent(
     modifier: Modifier = Modifier,
-    uiState: GameDetailsScreen.UiState
+    uiState: GameDetailsScreen.UiState,
+    onDelete: (Int) -> Unit,
+    onSave: (id: Int, title: String, image: String) -> Unit,
+    onBackClick: () -> Unit
 ) {
 
     if (uiState.isLoading) {
@@ -280,7 +293,54 @@ fun GameDetailsScreenContent(
                 }
 
             }
+            Row(
+                modifier = Modifier
+                    .padding(horizontal = 16.dp)
+                    .padding(top = 16.dp)
+                    .fillMaxWidth()
+            ) {
 
+                IconButton(
+                    onClick = onBackClick,
+                    modifier = Modifier.background(color = Color.White, shape = CircleShape)
+                ) {
+                    Icon(
+                        imageVector = Icons.AutoMirrored.Filled.ArrowBack,
+                        contentDescription = null,
+                        modifier = Modifier.padding(4.dp)
+                    )
+                }
+
+                Spacer(modifier = Modifier.weight(1f))
+
+                IconButton(
+                    onClick = {
+                        onSave(data.id, data.name, data.backgroundImage)
+                    },
+                    modifier = Modifier.background(color = Color.White, shape = CircleShape)
+                ) {
+                    Icon(
+                        imageVector = Icons.Default.Favorite, contentDescription = null,
+                        modifier = Modifier.padding(4.dp)
+                    )
+                }
+
+                Spacer(modifier = Modifier.width(12.dp))
+
+
+                IconButton(
+                    onClick = {
+                        onDelete(data.id)
+                    },
+                    modifier = Modifier.background(color = Color.White, shape = CircleShape)
+                ) {
+                    Icon(
+                        imageVector = Icons.Default.Delete, contentDescription = null,
+                        modifier = Modifier.padding(4.dp)
+                    )
+                }
+
+            }
         }
     }
 }

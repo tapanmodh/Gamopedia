@@ -29,7 +29,9 @@ object GameNavGraph : BaseNavGraph {
             composable(Dest.Game.route) {
                 GameScreen(
                     modifier = modifier.fillMaxSize(),
-                    onFavoriteClick = {},
+                    onFavoriteClick = {
+                        navHostController.navigate(FavoriteNavGraph.Dest.Favorite.route)
+                    },
                     onSearchClick = {
                         navHostController.navigate(SearchNavGraph.Dest.Search.route)
                     },
@@ -41,7 +43,9 @@ object GameNavGraph : BaseNavGraph {
 
             composable(Dest.Details.route) {
                 val id = it.arguments?.getString("id")
-                GameDetailsScreen(modifier = Modifier.fillMaxSize(),id.toString())
+                GameDetailsScreen(modifier = Modifier.fillMaxSize(), id.toString(), onBackClick = {
+                    navHostController.popBackStack()
+                })
             }
         }
     }

@@ -13,7 +13,7 @@ class ApiService(val httpClient: HttpClient) {
         return try {
             val response = httpClient.get("api/games") {
                 url {
-                    parameter("key", "a8e6e41489bd42beb2b136335262bc68")
+                    parameter("key", "enter your api key")
                 }
             }.body<GameResponse>()
             Result.success(response)
@@ -26,7 +26,7 @@ class ApiService(val httpClient: HttpClient) {
         return try {
             val response = httpClient.get("api/games") {
                 url {
-                    parameter("key", "a8e6e41489bd42beb2b136335262bc68")
+                    parameter("key", "enter your api key")
                     parameter("search", q)
                 }
             }.body<GameResponse>()
@@ -40,7 +40,7 @@ class ApiService(val httpClient: HttpClient) {
         return try {
             val response = httpClient.get("api/games/${id}") {
                 url {
-                    parameter("key", "a8e6e41489bd42beb2b136335262bc68")
+                    parameter("key", "enter your api key")
                 }
             }.body<GameDetailsResponse>()
             Result.success(response)

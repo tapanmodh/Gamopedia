@@ -44,6 +44,7 @@ kotlin {
             implementation(projects.game.domain)
             implementation(projects.common.data)
             implementation(projects.common.domain)
+            implementation(projects.coreDatabase)
 
             implementation(compose.runtime)
             implementation(compose.foundation)

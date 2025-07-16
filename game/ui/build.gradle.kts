@@ -42,6 +42,7 @@ kotlin {
 
             implementation(projects.game.domain)
             implementation(projects.common.domain)
+            implementation(projects.common.ui)
 
             implementation(compose.runtime)
             implementation(compose.foundation)

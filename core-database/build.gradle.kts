@@ -1,6 +1,4 @@
 import org.jetbrains.compose.desktop.application.dsl.TargetFormat
-import org.jetbrains.kotlin.gradle.ExperimentalKotlinGradlePluginApi
-import org.jetbrains.kotlin.gradle.dsl.JvmTarget
 
 plugins {
     alias(libs.plugins.kotlinMultiplatform)
@@ -8,14 +6,12 @@ plugins {
     alias(libs.plugins.composeMultiplatform)
     alias(libs.plugins.composeCompiler)
     alias(libs.plugins.composeHotReload)
+    alias(libs.plugins.sql.delight)
 }
 
 kotlin {
     androidTarget {
-        @OptIn(ExperimentalKotlinGradlePluginApi::class)
-        compilerOptions {
-            jvmTarget.set(JvmTarget.JVM_11)
-        }
+
     }
 
     listOf(
@@ -24,8 +20,8 @@ kotlin {
         iosSimulatorArm64()
     ).forEach { iosTarget ->
         iosTarget.binaries.framework {
-            baseName = "ComposeApp"
-            isStatic = true
+//            baseName = "ComposeApp"
+//            isStatic = true
         }
     }
 
@@ -37,6 +33,7 @@ kotlin {
         androidMain.dependencies {
             implementation(compose.preview)
             implementation(libs.androidx.activity.compose)
+            implementation(libs.sql.delight.android)
         }
         commonMain.dependencies {
             implementation(compose.runtime)
@@ -47,6 +44,11 @@ kotlin {
             implementation(compose.components.uiToolingPreview)
             implementation(libs.androidx.lifecycle.viewmodel)
             implementation(libs.androidx.lifecycle.runtimeCompose)
+
+            implementation(libs.sql.delight.common)
+            api(libs.sql.delight.common.coroutines)
+
+            implementation(libs.koin.core)
         }
         commonTest.dependencies {
             implementation(libs.kotlin.test)
@@ -54,8 +56,23 @@ kotlin {
         desktopMain.dependencies {
             implementation(compose.desktop.currentOs)
             implementation(libs.kotlinx.coroutinesSwing)
+
+            implementation(libs.sql.delight.desktop)
+        }
+        iosMain.dependencies {
+            implementation(libs.sql.delight.ios)
         }
     }
+}
+
+sqldelight {
+    databases {
+        create("AppDatabase") {
+            packageName.set("com.tm.coreDatabase")
+            srcDirs("src/commonMain/sqldelight")
+        }
+    }
+    linkSqlite = true
 }
 
 android {

@@ -5,5 +5,5 @@ import com.tm.game.domain.repository.GameRepository
 import org.koin.dsl.module
 
 fun getGameDataModule() = module {
-    factory<GameRepository> { GameRepositoryImpl(apiService = get()) }
+    factory<GameRepository> { GameRepositoryImpl(apiService = get(), appDatabase = get()) }
 }

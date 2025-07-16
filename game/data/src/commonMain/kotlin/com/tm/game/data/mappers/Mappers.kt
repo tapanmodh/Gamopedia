@@ -18,12 +18,15 @@ fun GameDetailsResponse.toDomainGameDetails(): GameDetails {
             Platform(
                 name = it.platform.name,
                 image = it.platform.image_background,
-            )},
+            )
+        },
         stores = stores.map {
-            Store(name = it.store.name,
-                  image = it.store.image_background,
-                  gameCount = it.store.games_count,
-                domain = it.store.domain)
+            Store(
+                name = it.store.name,
+                image = it.store.image_background,
+                gameCount = it.store.games_count,
+                domain = it.store.domain
+            )
         },
         developers = developers.map {
             Developer(
